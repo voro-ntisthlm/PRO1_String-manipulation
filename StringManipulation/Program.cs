@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StringManipulation
 {
@@ -16,15 +17,14 @@ namespace StringManipulation
             while (isRunning)
             {                
                 WriteScores(splitScores);
-                inputHandler(splitScores);
+                splitScores = inputHandler(splitScores);
                 
             }
 
             Console.ReadLine();
         }
 
-        static void inputHandler(List<string[]> parsedList){
-
+        static List<string[]> inputHandler(List<string[]> parsedList){
             Console.Write(
                 "==============================================================\n"+
                 " Enter Name     (All characters allowed): "
@@ -39,16 +39,57 @@ namespace StringManipulation
             string inputScore = Console.ReadLine();
 
             if(Int32.TryParse(inputScore, out int newScore)){
-                //EnterScore(newScore, inputName, parsedList);
+                List<string[]> entryScore = EnterScore(newScore, inputName, parsedList);
+                
+                // Debug code
+                foreach (var item in entryScore)
+                {
+                    Console.WriteLine(item[0]);
+                }
+                Console.ReadKey();
+                return entryScore;
             }
             else
             {
                 Console.Write(" No No, that is not a number, press [enter] to try again... ");
                 Console.ReadLine();
+                return parsedList;
             }
 
         }
         
+        static List<string[]> EnterScore(int newScore, string name, List<string[]> list){
+            try
+            {
+                Console.WriteLine("DADAWD");
+                var oldScore = list.FirstOrDefault(item => item.Contains(name.ToUpper()));
+                Console.WriteLine(oldScore[0]);
+                if (name.ToUpper() ==  oldScore[0])
+                {
+                    Console.WriteLine("DAWDAW");
+                    string[] entry = {name.ToUpper(), newScore.ToString()};
+
+                    list.Remove(oldScore);
+                    list.Add(entry);
+                    return list;
+                }
+                else{
+                    
+                    string[] entry = {name.ToUpper(), newScore.ToString()};
+                    Console.WriteLine("DDD");
+                    list.Add(entry);
+                    Console.WriteLine("AAA");
+
+                    return list;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Whoops, something went wrong when trying to add the entry, try restarting the program if the issue persists.");
+                return list;   
+            }
+        }
+
         // Split each 
         static List<string[]> SplitScores(string[] scores){
 
